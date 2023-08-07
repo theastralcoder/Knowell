@@ -1,0 +1,115 @@
+<style>
+    /* Styling for the name and photo section */
+    .center {
+        text-align: center;
+    }
+    .table-container {
+        margin: auto;
+        width: 80%;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        padding: 8px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+.name-photo {
+  display: flex;
+  flex-direction:column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.name-photo img {
+  width: 150px;
+height: 150px;
+  border-radius: 10%;
+  margin-right: 10px;
+  margin-top: 10px;
+  padding-top: 10px;
+  
+}
+
+/* Styling for the links section */
+.links {
+  margin-top: 20px;
+}
+
+.links ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.links h3 {
+  text-decoration: underline;
+}
+
+.links li {
+  margin-bottom: 5px;
+}
+
+.links a {
+  text-decoration: none;
+}
+
+/* Styling for the publication list section */
+.links p {
+  margin-bottom: 10px;
+}
+.name-photo h2 {
+        font-size: 24px;
+    }   
+.links ul.publications-list li {
+  margin-bottom: 5px;
+}
+.icon{
+  width:20px;
+  height:20px;
+}
+</style>
+<div class="name-photo">
+    <img src="<%= i.photo %>" alt="<%= i.name %>'s Photo"><br>
+    <h2><%= i.name %></h2>
+</div>
+<div class="links">
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Google Scholar</th>
+                <th>Orcid</th>
+                <th>Publons</th>
+                <th>Scopus</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% let count = 0 %>
+            <% for (let i = 0; i < result.length; i++) { %>
+                <% count++ %>
+                <tr>
+                    <td><a href="<%= result[i].link %>"><%= result[i].title %></a></td>
+                    <% if (source === "googlescholar") { %>
+                      <td><img class="icon" src="/images/tick.png"></td>
+                  <% } else { %>
+                      <td></td>
+                  <% } %>
+                  <% if (source === "orcid") { %>
+                      <td><img class="icon" src="/images/tick.png"></td>
+                  <% } else { %>
+                      <td></td>
+                  <% } %>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+    <p>Total count: <%= count %></p>
+</div>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles/styles.css"> 
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+	<script src="index.js"></script>
+	<title>Knowell</title>
+</head>
+
+<body class="bg" ng-app="knowell">
+	<script>
+		
+function validateSearch() {
+    var searchBox = document.getElementById("searchbar");
+    var searchQuery = searchBox.value;
+    if (searchQuery === "") {
+        alert("Please search something");
+        return false;
+    }
+    const namePubRegex = /^[a-zA-Z]+$/;
+
+    if (!namePubRegex.test(searchQuery)) {
+        alert("Please enter a valid name or publication title");
+        return false;
+    }
+    return true;
+}
+var app = angular.module("knowell", ['ngRoute']);
+app.config(function ($routeProvider) {
+    $routeProvider
+        .when("/", {
+            templateUrl: "home.html"
+        })
+        .when("/about", {
+            templateUrl: "about.html"
+        })
+});
+app.controller('searchController', function ($scope,$http) {
+    $scope.query = '';
+    $http.get('/teachers').then(function(resp)
+    {
+        $scope.item=resp.data;
+		console.log(resp.data)
+    })
+    $scope.search = function (i) {
+        var keyword = $scope.query.toLowerCase();
+        if (i.name.toLowerCase().includes(keyword)){
+			console.log(i.name);
+            return i;
+        }
+       
+    };
+   
+});
+	</script>
+	<nav>
+		<h1><a class="navtitle" href="#">Knowell</a></h1>
+	</nav>
+
+	<div class="main" ng-controller="searchController">
+		<form method="" action="" name="searchform">
+			<input id="searchbar" name="query" type="search" ng-model="query"
+				placeholder="Enter the name of the publications,citations,author..." size="50"><button
+				onClick=validateSearch() id="search" type="submit"><i class="fa fa-search"></i></button>
+		
+		</form>
+				<ul ng-hide=searchform.query.$pristine>
+					
+				<li ng-repeat="i in item | filter:query:name">
+					<div class="list">
+						<div class="name-photo">
+							<img src="{{i.photo}}" alt="{{i.name}}'s Photo">
+							{{i.name}}
+						</div>
+						<div class="links">
+							<ul>
+								<h3 style="text-decoration:underline">Publications</h3>
+								<li><a href="{{i.googlescholar}}">Google Scholar</a></li>
+								<li><a href="{{i.orcid}}">Orcid</a></li>
+								<li><a style="text-decoration:none;color:black;" href="/teacher/{{i._id}}">Click to view full profile</a></li>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+		
+	</div>
+	<footer class="content">
+		<div class="footele">
+			
+			<a href="/about">About</a>
+		</div>
+		<p>Developed by Pavan G R</p>
+	</footer>
+
+</body>
+
+</html>
